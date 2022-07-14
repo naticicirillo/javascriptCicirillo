@@ -2,27 +2,26 @@ let total = 0;
 let agregar = " ";
 const carrito = [];
 
-function Prenda(nombre, categoria, precio) {
+function Prenda(nombre, precio) {
     this.nombre = nombre;
-    this.categoria = categoria;
     this.precio = precio;
 }
 
-const sweater1 = new Prenda("Sweater Amapola", "Sweaters", 25000);
-const camisa = new Prenda("Camisa Perséfone", "Camisas", 8500);
-const pantalon = new Prenda("Pantalón Brooklyn", "Pantalones", 11500);
-const pollera = new Prenda("Pollera Allegra", "Polleras", 9000);
-const abrigo = new Prenda("Abrigo Olivia", "Abrigos", 28000);
-const sweater2 = new Prenda("Sweater India", "Sweaters", 17000);
-const vestido1 = new Prenda("Vestido Aurora", "Vestidos", 10000);
-const vestido2 = new Prenda("Vestido Ferraro", "Vestidos", 12500);
+const sweater1 = new Prenda("Sweater Amapola", 25000);
+const camisa = new Prenda("Camisa Perséfone", 8500);
+const pantalon = new Prenda("Pantalón Brooklyn", 11500);
+const pollera = new Prenda("Pollera Allegra", 9000);
+const abrigo = new Prenda("Abrigo Olivia", 28000);
+const sweater2 = new Prenda("Sweater India", 17000);
+const vestido1 = new Prenda("Vestido Aurora", 10000);
+const vestido2 = new Prenda("Vestido Ferraro", 12500);
 
 saludo();
 
 function saludo() {
     let nombre = prompt("Ingrese su nombre:");
 
-    alert("¡HOLA " + nombre.toUpperCase() + "!");
+    alert("¡Hola " + nombre.toUpperCase() + "!");
 
     pregunta()
 }
@@ -44,29 +43,21 @@ while (agregar == "Si" || agregar == "si" || agregar == "SI") {
     8) ${vestido2.nombre} - $${vestido2.precio}`));
 
     if (prenda == 1) {
-        total += sweater1.precio;
-        carrito.push(sweater1.nombre);
+        carrito.push({producto: sweater1.nombre, precio: sweater1.precio});
     }else if (prenda == 2) {
-        total += camisa.precio;
-        carrito.push(camisa.nombre);
+        carrito.push({producto: camisa.nombre, precio: camisa.precio});
     }else if (prenda == 3) {
-        total += pantalon.precio;
-        carrito.push(pantalon.nombre);
+        carrito.push({producto: pantalon.nombre, precio: pantalon.precio});
     }else if (prenda == 4) {
-        total += pollera.precio;
-        carrito.push(pollera.nombre);
+        carrito.push({producto: pollera.nombre, precio: pollera.precio});
     }else if (prenda == 5) {
-        total += abrigo.precio;
-        carrito.push(abrigo.nombre);
+        carrito.push({producto: abrigo.nombre, precio: abrigo.precio});
     }else if (prenda == 6) {
-        total += sweater2.precio;
-        carrito.push(sweater2.nombre);
+        carrito.push({producto: sweater2.nombre, precio: sweater2.precio});
     }else if (prenda == 7) {
-        total += vestido1.precio;
-        carrito.push(vestido1.nombre);
+        carrito.push({producto: vestido1.nombre, precio: vestido1.precio});
     }else if (prenda == 8) {
-        total += vestido2.precio;
-        carrito.push(vestido2.nombre);
+        carrito.push({producto: vestido2.nombre, precio: vestido2.precio});
     }else {
         alert("La prenda elegida no está disponible.");
     }
@@ -75,8 +66,12 @@ while (agregar == "Si" || agregar == "si" || agregar == "SI") {
 }
 
 if (agregar == "No" || agregar == "no" || agregar == "NO") {
+    carrito.forEach((item) => {total += item.precio});
+
     if (total != 0) {
-        alert(`CARRITO:\n${carrito.join("\n")}\nTOTAL: $${total}`);
+        let listaPrendas = carrito.map(item => item.producto);
+
+        alert(`CARRITO:\n${listaPrendas.join("\n")}\n\nTOTAL: $${total}`);
     } else {
         alert(`CARRITO:\nEl carrito está vacío.`);
     }
