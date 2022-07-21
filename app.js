@@ -1,106 +1,108 @@
-let total = 0;
-let agregar = " ";
-let nombre = " ";
-const carrito = [];
+// -- VARIABLES ---------------------------------------------------------
 
-const tienda = [
-    {prenda: "Sweater Amapola", precio: 25000},
-    {prenda: "Camisa Perséfone", precio: 8500},
-    {prenda: "Pantalón Brooklyn", precio: 11500},
-    {prenda: "Pollera Allegra", precio: 9000},
-    {prenda: "Abrigo Olivia", precio: 28000},
-    {prenda: "Sweater India", precio: 17000},
-    {prenda: "Vestido Aurora", precio: 10000},
-    {prenda: "Vestido Ferraro", precio: 12500},
-];
+const carrito = document.querySelector("#carrito");
+const contenedorCarrito = document.querySelector("#lista-carrito tbody");
+const vaciarCarritoBtn = document.querySelector("#vaciar-carrito");
+const listaPrendas = document.querySelector(".productos");
+let articulosCarrito = [];
 
-// -----------------------------------------------------------------
+cargarEventListeners();
 
-const productos = document.querySelector(".productos");
+function cargarEventListeners() {
+    // Agregar prenda al carrito
+    listaPrendas.addEventListener("click", agregarPrenda);
 
-for (let producto of tienda) {
-    let publicados = document.createElement("button");
+    // Eliminar prenda del carrito
+    carrito.addEventListener("click", eliminarPrenda);
 
-    publicados.innerHTML = `<h1>${producto.prenda}</h1>
-    <h2>$${producto.precio}</h2>`;
+    // Vaciar carrito
+    vaciarCarritoBtn.addEventListener("click", () => {
+        articulosCarrito = [];
 
-    productos.appendChild(publicados);
+        limpiarHTML();
+    });
 }
 
-// -----------------------------------------------------------------
+// -- FUNCIONES ---------------------------------------------------------
 
-saludo();
+// A través del boton podemos acceder a la prenda seleccionada
+function agregarPrenda(e) {
+    e.preventDefault();
 
-function saludo() {
-    nombre = prompt("Ingrese su nombre:");
-
-    alert("¡Hola " + nombre.toUpperCase() + "!");
-
-    pregunta()
-}
-
-// -----------------------------------------------------------------
-
-let nombreCarrito = document.querySelector(".carrito");
-
-nombreCarrito.innerHTML = `<a href="#">CARRITO DE ${nombre.toUpperCase()}</a>`;
-
-// -----------------------------------------------------------------
-
-function pregunta() {
-    agregar = prompt(`¿Quiere agregar una prenda al carrito?\nSi / No`);
-}
-    
-while (agregar == "Si" || agregar == "si" || agregar == "SI") {
-    let prenda = parseInt(prompt(`¿Qué prenda quiere agregar? (Ingrese el número)\n1) Sweater Amapola - $25.000\n2) Camisa Perséfone - $8.500\n3) Pantalón Brooklyn - $11.500\n4) Pollera Allegra - $9.000\n5) Abrigo Olivia - $28.000\n6) Sweater India - $17.000\n7) Vestido Aurora - $10.000\n8) Vestido Ferraro - $12.500`));
-
-    if (prenda == 1) {
-        carrito.push(tienda[0]);
-    }else if (prenda == 2) {
-        carrito.push(tienda[1]);
-    }else if (prenda == 3) {
-        carrito.push(tienda[2]);
-    }else if (prenda == 4) {
-        carrito.push(tienda[3]);
-    }else if (prenda == 5) {
-        carrito.push(tienda[4]);
-    }else if (prenda == 6) {
-        carrito.push(tienda[5]);
-    }else if (prenda == 7) {
-        carrito.push(tienda[6]);
-    }else if (prenda == 8) {
-        carrito.push(tienda[7]);
-    }else {
-        alert("La prenda elegida no está disponible.");
+    if (e.target.classList.contains("agregar-carrito")) {
+        const prendaSeleccionada = e.target.parentElement;
+        leerDatosPrenda(prendaSeleccionada);
     }
-
-    pregunta();
 }
 
-if (agregar == "No" || agregar == "no" || agregar == "NO") {
-    carrito.forEach((item) => {total += item.precio});
+// Eliminar prenda del carrito
+function eliminarPrenda(e) {
+    e.preventDefault();
 
-    if (total != 0) {
-        let listaPrendas = carrito.map(item => item.prenda);
+    if (e.target.classList.contains("borrar-prenda")) {
+        const prendaID = e.target.getAttribute("id");
 
-        alert(`CARRITO:\n${listaPrendas.join("\n")}\n\nTOTAL: $${total}`);
-        
-        let metodoPago = parseInt(prompt(`¿Con qué método de pago quiere abonar? (Ingrese el número)\n1) Tarjeta\n2) Transferencia\n3) Pago con efectivo en el local`));
+        // Eliminar prenda del arreglo de articulosCarrito por el ID
+        articulosCarrito = articulosCarrito.filter((prenda) => prenda.id !== prendaID);
 
-        if (metodoPago == 1) {
-            let titular = prompt("Ingrese el nombre del titular de la tarjeta:");
-    
-            let tarjeta = parseInt(prompt("Ingrese el numero de tarjeta:"));
-    
-            alert(`¡Su compra se ha realizado con éxito!\n\nDATOS DEL COMPRADOR\nTitular: ${titular.toUpperCase()}\nN° de tarjeta: ${tarjeta}`);
-        }else if (metodoPago == 2) {
-            alert(`Debe transferir $${total} al siguiente CBU antes de las 24hs, sino su compra será cancelada.\n\nCBU: XXXXXXXXXXXXXXXXXXXXXX`);
-        }else if (metodoPago == 3) {
-                alert(`Deberá abonar $${total} en efectivo al momento de retirar su compra.`);
-        }else {
-            alert(`Este método de pago no está disponible.`)
-        }
+        carritoHTML();
+    }
+}
+
+// Lee los datos del prenda seleccionado y los extrae
+function leerDatosPrenda(prenda) {
+    const infoPrenda = {
+        imagen: prenda.querySelector("img").src,
+        titulo: prenda.querySelector("section div h1").innerText,
+        precio: prenda.querySelector("section div h2").innerText,
+        id: prenda.querySelector("section div a").getAttribute("id"),
+        cantidad: 1,
+    };
+
+    // Revisa si un elemento ya existe en el carrito
+    const existe = articulosCarrito.some((prenda) => prenda.id === infoPrenda.id);
+
+    if (existe) {
+        // Actualiza la cantidad
+        const prendas = articulosCarrito.map((prenda) => {
+            if (prenda.id === infoPrenda.id) {
+                prenda.cantidad++;
+                return prenda; // Retorna objeto actualizado
+            }else {
+                return prenda; // Retorna los objetos que no son duplicados
+            }
+        });
+
+        articulosCarrito = [...prendas];
     } else {
-        alert(`CARRITO:\nEl carrito está vacío.`);
+        // Agrega elementos al arreglo del carrito
+        articulosCarrito = [...articulosCarrito, infoPrenda];
     }
+
+    carritoHTML();
+}
+
+// Muestra el carrito en el HTML
+function carritoHTML() {
+    // Limpia el HTML
+    limpiarHTML();
+
+    //Recorre el carrito y genera el HTML
+    articulosCarrito.forEach((prenda) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${prenda.cantidad}</td>
+        <td>${prenda.titulo}</td>
+        <td>${prenda.precio}</td>
+        <td>
+        <a href="" class="borrar-prenda" id="${prenda.id}">X</a>
+        </td>`;
+
+        // Agrega el HTML del carrito en el tbody
+        contenedorCarrito.appendChild(row);
+    });
+}
+
+// Elimina los prendas del HTML
+function limpiarHTML() {
+    contenedorCarrito.innerHTML = "";
 }

@@ -15,7 +15,7 @@ body {
 
 header nav {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
 }
 
@@ -32,15 +32,7 @@ header nav div a img {
     padding: 0px 10px 0px 10px;
 }
 
-.menu {
-    width: 25%;
-    text-align: start;
-}
 
-.carrito {
-    width: 25%;
-    text-align: end;
-}
 
 /* -------------------------------------------------------------- */
 
@@ -69,24 +61,74 @@ header nav div a img {
     padding: 10%;
 }
 
-section button {
+section div {
     background-color: rgb(167, 156, 134);
     border-style: none;
-    margin: 20px;
+    margin: 10px;
 }
 
-section button h1 {
+section div img {
+    width: 300px;
+}
+
+section div h1 {
     font-family: 'Karla', sans-serif;
     font-size: 20px;
     font-weight: 700;
     color: rgb(56, 51, 46);
+    text-align: center;
 }
 
-section button h2 {
+section div h2 {
     font-family: 'Karla', sans-serif;
     font-size: 15px;
     font-weight: 300;
     color: #595959;
+    text-align: center;
+}
+
+.agregar-carrito {
+    font-family: 'Karla', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #595959;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/* -- CARRITO ---------------------------------------------------- */
+
+.carritoTitulo {
+    font-size: 50px;
+    font-weight: 500;
+    color: white;
+    text-align: center;
+}
+
+#carrito {
+    margin: 0% 15% 10% 15%;
+}
+
+#vaciar-carrito {
+    font-family: 'Karla', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #595959;
+    background-color: rgb(167, 156, 134);
+    border-color: #595959;
+    text-decoration: none;
+    border-style: solid;
+    border-width: 1px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.borrar-prenda {
+    text-decoration: none;
+    color: black;
 }
 
 /* -- FOOTER ----------------------------------------------------- */
